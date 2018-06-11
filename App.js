@@ -1,69 +1,75 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
-  Platform,
   StyleSheet,
-  Text,
-  View,
   StatusBar
 } from 'react-native';
+import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from 'react-apollo';
 import SplashScreen from 'react-native-splash-screen';
+import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { Icon } from 'native-base';
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
+import Home from './screens/Home';
+import Saved from './screens/Saved';
+import PostDetail from './screens/components/PostDetail';
+
+const client = new ApolloClient({
+  uri: 'https://graphql-server-dev.herokuapp.com/graphql'
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+const AppStackNavigator = createStackNavigator({
+  HomeScreen: { screen: Home },
+  PostDetail: { screen: PostDetail }
+});
+
+console.disableYellowBox = true;
+
+const AppBottomTabNavigator = createBottomTabNavigator({
+  Home: {
+    screen: AppStackNavigator,
+    navigationOptions: {
+      tabBarLabel: 'HOME',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name="ios-home-outline" style={{ color: tintColor, fontSize: 24 }} />
+      )
+    }
+  },
+  Saved: {
+    screen: Saved,
+    navigationOptions: {
+      tabBarLabel: 'SAVED',
+      tabBarIcon: ({ tintColor }) => (
+        <Icon name="ios-heart-outline" style={{ color: tintColor, fontSize: 24 }} />
+      )
+    }
+  }
+}, {
+    tabBarOptions: {
+      inactiveTintColor: 'grey',
+      style: {
+        backgroundColor: 'white',
+        borderTopWidth: 0,
+        shadowOffset: { width: 5, height: 3 },
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        elevation: 5
+      }
+    }
+  });
+
+export default class App extends Component {
   componentDidMount() {
     SplashScreen.hide();
   }
   render() {
     return (
-      <View style={styles.container}>
+      <ApolloProvider client={client}>
         <StatusBar
-          barStyle="light-content"
           backgroundColor="#4F6D7A"
+          barStyle="light-content"
         />
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
+        <AppBottomTabNavigator />
+      </ApolloProvider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#4F6D7A',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    color: '#F5FCFF',
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-    color: '#F5FCFF',
-  },
-});
