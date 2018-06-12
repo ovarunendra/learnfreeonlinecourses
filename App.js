@@ -27,11 +27,16 @@ console.disableYellowBox = true;
 const AppBottomTabNavigator = createBottomTabNavigator({
   Home: {
     screen: AppStackNavigator,
-    navigationOptions: {
-      tabBarLabel: 'HOME',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-home-outline" style={{ color: tintColor, fontSize: 24 }} />
-      )
+    navigationOptions: ({navigation}) => {
+      const tabBarVisible = navigation.getParam('hideBar');
+      console.log('tabBarVisible', tabBarVisible)
+      return {
+        tabBarVisible,
+        tabBarLabel: 'HOME',
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="ios-home-outline" style={{ color: tintColor, fontSize: 24 }} />
+        )
+      }
     }
   },
   Saved: {
