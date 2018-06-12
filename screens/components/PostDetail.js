@@ -56,7 +56,7 @@ class PostDetail extends Component {
                 <Content>
                     <Card>
                         <CardItem >
-                            <Text style={{ fontSize: 16, fontWeight: '700' }}>{title}</Text>
+                            <HTML html={title} baseFontStyle={{ fontSize: 16, fontWeight: '700' }} />
                         </CardItem>
                         <CardItem cardBody>
                             <Image source={{ uri: imageUri }}

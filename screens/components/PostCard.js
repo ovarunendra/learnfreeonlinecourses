@@ -9,7 +9,7 @@ class PostCard extends Component {
         return (
             <Card style={{ marginLeft: 10, marginRight: 10 }}>
                 <CardItem >
-                    <Text style={{ fontSize: 16, fontWeight: '700' }}>{title}</Text>
+                    <HTML html={title} baseFontStyle={{ fontSize: 16, fontWeight: '700' }} />
                 </CardItem>
                 <CardItem cardBody>
                     <Image source={{ uri: imageUri }}
